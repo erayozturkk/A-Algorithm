@@ -47,7 +47,10 @@ class Maze:
         # Print the maze
         for row in self.maze:
             for cell in row:
-                print(cell.cell_type, end = ' ')
+                if cell == self.agent_node:
+                    print('S', end = ' ')
+                else:
+                    print(cell.cell_type, end = ' ')
             print()
         print('\n')
 

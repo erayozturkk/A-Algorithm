@@ -32,8 +32,8 @@ while goal_test(current_state.maze) == False:
                 FRONTIER.append(state)
         else:
             FRONTIER.append(state)
-            print("Successor state: ", '\n')
-            state.maze.print_maze()
+            '''print("Successor state: ", '\n')
+            state.maze.print_maze()'''
     CLOSED.append(current_state)
 
 print("SOLUTION: ", '\n')
@@ -42,6 +42,8 @@ while current_state.parent != None:
     print("Current state: ", '\n')
     current_state.maze.print_maze()
     current_state = current_state.parent
+print("Current state: ", '\n')
+current_state.maze.print_maze()
     
 
 

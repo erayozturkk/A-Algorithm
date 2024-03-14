@@ -1,9 +1,12 @@
 #import the maze.py file
 from maze import *
-from functions import *
+import time
+import sys
+row_count = int(input("Enter the number of rows: "))
+col_count = int(input("Enter the number of columns: "))
 
 
-maze = Maze(6) #initialize a 6x6 maze
+maze = Maze(row_count,col_count) #initialize a  maze(row,col)
 maze.customize_maze() #customize the maze
 maze.print_maze() #print the maze
 
@@ -14,8 +17,11 @@ FRONTIER.append(current_state)
 CLOSED = []
 print("F value of state 0:", current_state.f_value())
 
-
-while goal_test(current_state.maze) == False:
+iteration = 0
+#start the timer
+start = time.time()
+while current_state.maze.goal_test() == False and iteration < 100000:
+    iteration += 1
     #pop the first element from the frontier
     current_state = FRONTIER.pop(0)
     print("Current state: ", '\n')
@@ -23,28 +29,46 @@ while goal_test(current_state.maze) == False:
 
     #successor_state_function
     for state in current_state.successor_states():
-        if state in CLOSED:
-            continue
-        elif state in FRONTIER.queue:
-            index = FRONTIER.queue.index(state)
-            if state.f_value < FRONTIER.queue[index].f_value:
-                FRONTIER.pop(index)
+        if (state.stringmaze, state.agent_position) not in  CLOSED:
+            if (state.stringmaze, state.agent_position) not in [(x.stringmaze, x.agent_position)for x in FRONTIER.queue]:
                 FRONTIER.append(state)
+            else:
+                for i in range(len(FRONTIER.queue)):
+                    if FRONTIER.queue[i].stringmaze == state.stringmaze:
+                        if state.f_value() < FRONTIER.queue[i].f_value():
+                            FRONTIER.queue[i] = state
+                            FRONTIER.queue.sort(key=lambda x: x.f_value())
         else:
-            FRONTIER.append(state)
-            '''print("Successor state: ", '\n')
-            state.maze.print_maze()'''
-    CLOSED.append(current_state)
+            print("State already visited")
+    CLOSED.append((current_state.stringmaze, current_state.agent_position))
 
-print("SOLUTION: ", '\n')
-while current_state.parent != None:
-    
-    print("Current state: ", '\n')
+# stop the timer
+end = time.time()
+
+if iteration == 100000:
+    print("No solution found")
+else:
+    print("SOLUTION: ")
+    total_distance = current_state.g_value
+    stepcount = 0
+    while current_state.parent != None:
+        stepcount += 1
+        print("Solution Step: ", '\n')
+        current_state.maze.print_maze()
+        current_state = current_state.parent
+    print("Step 0: ", '\n')
     current_state.maze.print_maze()
-    current_state = current_state.parent
-print("Current state: ", '\n')
-current_state.maze.print_maze()
+    print("Total distance travele: ", total_distance)
+    print("Total number of states in closed: ", len(CLOSED))
+    print("Total number of steps: ", stepcount)
+    print("Time taken: ", end - start, " seconds")
+    # calculate the size of FRONTIER and CLOSED in terms of bytes
+    print("Size of FRONTIER: ", sys.getsizeof(FRONTIER), " bytes")
+    print("Size of CLOSED: ", sys.getsizeof(CLOSED), " bytes")
+
+
     
+
 
 
 

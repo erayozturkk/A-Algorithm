@@ -1,5 +1,9 @@
 a1_color_maze.pdf
 maze_images/
+solutions.txt
+erayozturk_code.zip
+erayozturk_cs404_hw1.pdf
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

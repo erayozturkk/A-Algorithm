@@ -42,8 +42,9 @@ class Maze:
                     self.agent_node = self.maze[row][col]
                     
     def admissible_heuristic(self):
-        # Returns the admissible heuristic value for the given cell
+
         return sum(cell.cell_type == '0' for row in self.maze for cell in row)
+        
     
     def inadmissible_heuristic(self):
         uncolored_cells = sum(cell.cell_type == '0' for row in self.maze for cell in row)
